@@ -22,4 +22,4 @@ outputs:
     description: 'The milestone assigned to the pull-request'
 runs:
   using: 'node16'
-  main: 'index.js'
+  main: 'dist/index.js'
