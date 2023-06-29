@@ -1,0 +1,25 @@
+name: 'Hello World'
+description: 'Greet someone and record the time'
+inputs:
+  bugfix-tags:
+    description: 'Comma-separated list of tags indicating a bug-fix. If any of those match the PR is tags with the bug-fix milestone'
+    required: false
+    default: 'fix,chore,docs'
+  minor-tags:
+    description: 'Comma-separated list of tags indicating a minor version PR'
+    required: false
+    default: 'feat'
+  major-tags:
+    description: 'Comma-separated list of tags indicating a major version PR'
+    required: false
+    default: 'breaking'
+  fallback:
+    description: 'Milestone to fallback to if none of the above applies. Can be "bugfix", "minor", "major" or empty to disable fallbacks.'
+    required: false
+    default: 'minor'
+outputs:
+  milestone:
+    description: 'The milestone assigned to the pull-request'
+runs:
+  using: 'node16'
+  main: 'index.js'
