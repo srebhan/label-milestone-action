@@ -1,6 +1,7 @@
-# Label to milestone world javascript action
+# Assign milestone to pull-requests from label
 
-This action assigns milestones to pull-requests based on labels.
+This javascript action assigns milestones to pull-requests based on the labels
+of that pull-request. The action has some assumptions listed below.
 
 ## Assumptions
 
