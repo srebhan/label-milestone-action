@@ -1,19 +1,19 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'Milestones from label'
+description: 'This action assigns pull-requests to milestones based on labels, assuming semantic versioning.'
 inputs:
   repo-token:
-    description: 'The GITHUB_TOKEN token'
+    description: 'The GITHUB_TOKEN token for changing the pull-request milestone'
     required: true
   bugfix-labels:
-    description: 'Comma-separated list of tags indicating a bug-fix. If any of those match the PR is tags with the bug-fix milestone'
+    description: 'Comma-separated list of labels indicating a bug-fix.'
     required: false
     default: 'bug,documentation'
   minor-labels:
-    description: 'Comma-separated list of tags indicating a minor version PR'
+    description: 'Comma-separated list of labels indicating a minor version PR'
     required: false
     default: 'enhancement'
   major-labels:
-    description: 'Comma-separated list of tags indicating a major version PR'
+    description: 'Comma-separated list of labels indicating a major version PR'
     required: false
     default: 'breaking'
   fallback:
