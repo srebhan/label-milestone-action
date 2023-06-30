@@ -1,15 +1,18 @@
 name: 'Hello World'
 description: 'Greet someone and record the time'
 inputs:
-  bugfix-tags:
+  repo-token:
+    description: 'The GITHUB_TOKEN token'
+    required: true
+  bugfix-labels:
     description: 'Comma-separated list of tags indicating a bug-fix. If any of those match the PR is tags with the bug-fix milestone'
     required: false
-    default: 'fix,chore,docs'
-  minor-tags:
+    default: 'bug,documentation'
+  minor-labels:
     description: 'Comma-separated list of tags indicating a minor version PR'
     required: false
-    default: 'feat'
-  major-tags:
+    default: 'enhancement'
+  major-labels:
     description: 'Comma-separated list of tags indicating a major version PR'
     required: false
     default: 'breaking'

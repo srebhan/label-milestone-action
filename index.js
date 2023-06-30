@@ -6,9 +6,9 @@ async function run() {
     try {
         // Get the configuration options
         const token = core.getInput('repo-token', { required: true });
-        const bugfix = core.getInput('bugfix-tags').split(',');
-        const minor = core.getInput('minor-tags').split(',');
-        const major = core.getInput('major-tags').split(',');
+        const bugfix = core.getInput('bugfix-labels').split(',');
+        const minor = core.getInput('minor-labels').split(',');
+        const major = core.getInput('major-labels').split(',');
         const fallback = core.getInput('fallback');
 
         const context = github.context;
