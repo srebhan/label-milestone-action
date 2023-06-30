@@ -67,7 +67,7 @@ The below examples assume your latest released version has the title `v1.2.3`.
 When using the default for all optional settings above
 
 ```yaml
-uses: actions/label-milestone-action@v1.0.0
+uses: srebhan/label-milestone-action@v1.0.0
 with:
   repo-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -94,7 +94,7 @@ the milestone `v1.3.0`.
 In case you unset the fallback
 
 ```yaml
-uses: actions/label-milestone-action@v1.0.0
+uses: srebhan/label-milestone-action@v1.0.0
 with:
   repo-token: ${{ secrets.GITHUB_TOKEN }}
   fallback: ''
@@ -116,7 +116,7 @@ introduced a `dependencies` label to mark dependency updates. With the
 following configuration
 
 ```yaml
-uses: actions/label-milestone-action@v1.0.0
+uses: srebhan/label-milestone-action@v1.0.0
 with:
   repo-token: ${{ secrets.GITHUB_TOKEN }}
   bugfix-labels: 'fix,chore,docs,dependencies'
