@@ -23,6 +23,11 @@ inputs:
 outputs:
   milestone:
     description: 'The milestone assigned to the pull-request'
+
 runs:
   using: 'node16'
   main: 'dist/index.js'
+
+branding:
+  icon: 'flag'
+  color: 'orange'
