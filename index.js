@@ -109,6 +109,7 @@ async function run() {
         }
 
         // Set the milestone
+        core.debug(`Updating milestone to ${milestone.title}...`);
         const milestone = match[0]
         octokit.rest.issues.update({
             ...context.repo,
