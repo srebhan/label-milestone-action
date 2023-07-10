@@ -131,9 +131,12 @@ function bumpVersion(before, target) {
             version[2] += 1
             break;
         case 'minor':
+            version[2] = 0
             version[1] += 1
             break;
         case 'major':
+            version[2] = 0
+            version[1] = 0
             version[0] += 1
             break;
     }
