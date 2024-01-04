@@ -68,7 +68,7 @@ The below examples assume your latest released version has the title `v1.2.3`.
 When using the default for all optional settings above
 
 ```yaml
-uses: srebhan/label-milestone-action@v1.0.0
+uses: srebhan/label-milestone-action@v1.0.1
 with:
   repo-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -82,7 +82,7 @@ The actual *bugfix*, *minor* and *major milestones* are determined based on the
 latest release. For example assuming your latest release is titled `v1.2.3` then
 the title of the *bugfix milestone* correspond to `v1.2.4`, the title of the
 *minor milestone* corresponds to `v1.3.0` and the title of the
-*major* milestone* corresponds to `v2.0.0`.
+*major milestone* corresponds to `v2.0.0`.
 
 In case the target milestone does not exist, the `fallback` milestone is used.
 For example, if the pull-request would be assigned to the *bugfix milestone*
@@ -95,7 +95,7 @@ the milestone `v1.3.0`.
 In case you unset the fallback
 
 ```yaml
-uses: srebhan/label-milestone-action@v1.0.0
+uses: srebhan/label-milestone-action@v1.0.1
 with:
   repo-token: ${{ secrets.GITHUB_TOKEN }}
   fallback: ''
@@ -117,7 +117,7 @@ introduced a `dependencies` label to mark dependency updates. With the
 following configuration
 
 ```yaml
-uses: srebhan/label-milestone-action@v1.0.0
+uses: srebhan/label-milestone-action@v1.0.1
 with:
   repo-token: ${{ secrets.GITHUB_TOKEN }}
   bugfix-labels: 'fix,chore,docs,dependencies'
