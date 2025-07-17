@@ -25,7 +25,7 @@ outputs:
     description: 'The milestone assigned to the pull-request'
 
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
 
 branding:
