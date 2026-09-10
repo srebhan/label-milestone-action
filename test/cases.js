@@ -83,8 +83,7 @@ export const cases = [
         name: 'label list written with spaces after the commas',
         payload: pullRequest(['documentation']),
         inputs: { 'bugfix-labels': 'bug, documentation' },
-        expect: { output: 'v1.2.4', patchMilestone: 3 },
-        knownIssue: 'label lists are split on "," without trimming, so " documentation" never matches'
+        expect: { output: 'v1.2.4', patchMilestone: 3 }
     },
 
     // --- fallback ----------------------------------------------------------
