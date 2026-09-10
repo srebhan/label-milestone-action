@@ -1,9 +1,9 @@
-const http = require('http');
+import http from 'node:http';
 
 // A minimal stand-in for the GitHub REST API, covering just the three
 // endpoints the action talks to. The runner swaps out `state` per test case
 // and inspects `state.patches` afterwards to see what the action did.
-function createMockApi(state) {
+export function createMockApi(state) {
     return http.createServer((req, res) => {
         const path = new URL(req.url, 'http://localhost').pathname;
         const send = (code, body) => {
@@ -40,5 +40,3 @@ function createMockApi(state) {
         return send(404, { message: `unmocked endpoint: ${req.method} ${path}` });
     });
 }
-
-module.exports = { createMockApi };

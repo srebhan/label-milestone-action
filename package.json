@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Github action to assign milestones to PRs based on labels",
   "main": "index.js",
+  "type": "module",
   "scripts": {
+    "build": "ncc build index.js -o dist --license licenses.txt",
     "test": "node test/run.js"
   },
   "repository": {
@@ -20,5 +22,8 @@
   "dependencies": {
     "@actions/core": "^3.0.1",
     "@actions/github": "^9.1.1"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.45.0"
   }
 }

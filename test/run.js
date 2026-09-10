@@ -4,21 +4,23 @@
 // process, configured purely through environment variables. Nothing is stubbed
 // inside the action itself, only the GitHub API it talks to.
 //
-// Usage: node test/run.js [path-to-bundle]
+// Usage: node test/run.js [entry-point]
 //
-// Note this tests dist/index.js, the entry point action.yml actually runs, and
-// not index.js -- the sources are CommonJS while the @actions/* dependencies
-// are ESM-only, so index.js cannot be executed directly.
+// Defaults to dist/index.js, the entry point action.yml actually runs. Pass
+// index.js to test the sources instead.
 
-const { spawn } = require('child_process');
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
+import { spawn } from 'node:child_process';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const { createMockApi } = require('./mock-api');
-const { cases, DEFAULT_LATEST_RELEASE, DEFAULT_MILESTONES } = require('./cases');
+import { createMockApi } from './mock-api.js';
+import { cases, DEFAULT_LATEST_RELEASE, DEFAULT_MILESTONES } from './cases.js';
 
-const ENTRY = path.resolve(process.argv[2] || path.join(__dirname, '..', 'dist', 'index.js'));
+const testDir = path.dirname(fileURLToPath(import.meta.url));
+
+const ENTRY = path.resolve(process.argv[2] || path.join(testDir, '..', 'dist', 'index.js'));
 
 // The defaults declared in action.yml. The runner passes these to the action,
 // the action itself never sees them, so the tests have to supply them too.

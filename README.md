@@ -131,6 +131,25 @@ set correctly. Please also note that without the `fallback` all pull-requests
 not matching any of the above are left untouched and will not be assigned to
 any milestone.
 
+## Building
+
+The action ships the bundled `dist/index.js`, so the dependencies do not have
+to be installed on the runner. After changing `index.js`, rebuild it with
+
+```shell
+npm install
+npm run build
+```
+
+and commit the result together with the source change.
+
+The project is an ES module (`"type": "module"` in `package.json`), as the
+`@actions/*` dependencies are ESM-only and cannot be loaded from CommonJS.
+The build writes three files, **all of which have to be committed**:
+`dist/index.js`, `dist/licenses.txt` and a generated `dist/package.json`. The
+latter only contains `{"type": "module"}`, but without it the runner treats the
+bundle as CommonJS and the action fails at startup.
+
 ## Testing
 
 The test suite runs the bundled action the same way the GitHub runner does, as
@@ -143,12 +162,9 @@ npm test
 ```
 
 Scenarios live in [`test/cases.js`](test/cases.js), one entry per pull-request
-situation. To check a bundle other than `dist/index.js`, pass its path:
-`node test/run.js path/to/index.js`.
-
-Note that the tests run `dist/index.js`, the entry point `action.yml` actually
-uses, rather than `index.js`. The sources are CommonJS while the `@actions/*`
-dependencies are ESM-only, so `index.js` cannot be executed directly.
+situation. By default the tests run `dist/index.js`, the entry point
+`action.yml` actually uses. To check the sources instead, or any other bundle,
+pass the path: `node test/run.js index.js`.
 
 ### Known issues
 
