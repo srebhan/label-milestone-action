@@ -27,14 +27,14 @@ const pullRequest = (labels, extra = {}) => ({
 
 // Applied unless a case overrides them, so the mock repository always looks
 // like: latest release v1.2.3, with the three follow-up milestones open.
-const DEFAULT_LATEST_RELEASE = { name: 'v1.2.3' };
-const DEFAULT_MILESTONES = [
+export const DEFAULT_LATEST_RELEASE = { name: 'v1.2.3' };
+export const DEFAULT_MILESTONES = [
     milestone(3, 'v1.2.4'),
     milestone(4, 'v1.3.0'),
     milestone(5, 'v2.0.0')
 ];
 
-const cases = [
+export const cases = [
     // --- event handling ---------------------------------------------------
     {
         name: 'not a pull-request event',
@@ -185,5 +185,3 @@ const cases = [
         expect: { failed: true, noPatch: true }
     }
 ];
-
-module.exports = { cases, DEFAULT_LATEST_RELEASE, DEFAULT_MILESTONES };
