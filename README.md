@@ -173,8 +173,6 @@ are marked with a `knownIssue` note, reported separately and do not fail the
 suite. If one starts passing, the runner reports it as `FIXED` and fails, so
 the marker gets removed along with the fix.
 
-- Label lists are split on `,` without trimming, so `bugfix-labels: 'bug, documentation'`
-  never matches the `documentation` label.
 - `core.setFailed()` is called without returning, so an invalid `fallback` or
   ambiguous milestone titles fail the workflow but still assign a milestone to
   the pull-request.

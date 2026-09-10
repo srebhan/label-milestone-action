@@ -36523,9 +36523,9 @@ async function run() {
     try {
         // Get the configuration options
         const token = getInput('repo-token', { required: true });
-        const bugfix = getInput('bugfix-labels').split(',');
-        const minor = getInput('minor-labels').split(',');
-        const major = getInput('major-labels').split(',');
+        const bugfix = getLabelList('bugfix-labels');
+        const minor = getLabelList('minor-labels');
+        const major = getLabelList('major-labels');
         const fallback = getInput('fallback');
 
         const context = github_context;
@@ -36638,6 +36638,15 @@ async function run() {
         core_error(error)
         setFailed(error.message);
     }
+}
+
+// Split a comma-separated label input into a list, tolerating spaces around
+// the separators, e.g. 'bug, documentation'.
+function getLabelList(name) {
+    return getInput(name)
+        .split(',')
+        .map(label => label.trim())
+        .filter(label => label !== '');
 }
 
 function bumpVersion(before, target) {
