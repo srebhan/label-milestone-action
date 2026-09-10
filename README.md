@@ -130,3 +130,40 @@ we can sort the pull-requests to the right milestones in case the labels are
 set correctly. Please also note that without the `fallback` all pull-requests
 not matching any of the above are left untouched and will not be assigned to
 any milestone.
+
+## Testing
+
+The test suite runs the bundled action the same way the GitHub runner does, as
+a separate node process configured through environment variables, against a
+mock GitHub API. Nothing inside the action is stubbed, only the API it talks
+to. Run it with
+
+```shell
+npm test
+```
+
+Scenarios live in [`test/cases.js`](test/cases.js), one entry per pull-request
+situation. To check a bundle other than `dist/index.js`, pass its path:
+`node test/run.js path/to/index.js`.
+
+Note that the tests run `dist/index.js`, the entry point `action.yml` actually
+uses, rather than `index.js`. The sources are CommonJS while the `@actions/*`
+dependencies are ESM-only, so `index.js` cannot be executed directly.
+
+### Known issues
+
+Some cases describe how the action *should* behave but do not pass yet. They
+are marked with a `knownIssue` note, reported separately and do not fail the
+suite. If one starts passing, the runner reports it as `FIXED` and fails, so
+the marker gets removed along with the fix.
+
+- Label lists are split on `,` without trimming, so `bugfix-labels: 'bug, documentation'`
+  never matches the `documentation` label.
+- `core.setFailed()` is called without returning, so an invalid `fallback` or
+  ambiguous milestone titles fail the workflow but still assign a milestone to
+  the pull-request.
+- The empty-release guard only compares against `''`, so a release created from
+  a tag without a title (`name: null`) throws a `TypeError`.
+- A release name that is not a three-component version, e.g. `v1.2`, bumps to
+  `v1.2.NaN`; no milestone matches and the fallback then silently assigns the
+  minor milestone.

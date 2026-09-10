@@ -4,7 +4,7 @@
   "description": "Github action to assign milestones to PRs based on labels",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test/run.js"
   },
   "repository": {
     "type": "git",
