@@ -65,9 +65,10 @@ async function run() {
 
         // Get the latest release and bump the version
         const latest_response = await (octokit.rest.repos.getLatestRelease(context.repo))
-        const latest = latest_response.data.name
+        // Prefer the release title, but fall back to the tag for untitled releases
+        const latest = latest_response.data.name || latest_response.data.tag_name
         core.debug(`Latest release: ${latest}`);
-        if (latest == '') {
+        if (!latest) {
             core.info(`No release found...`);
             core.setOutput('milestone', '-');
             return;

@@ -79,10 +79,11 @@ the *bugfix milestone*, all pull-requests with a `breaking` label to the
 majority of your pull-requests are bug-fixes or non-breaking features.
 
 The actual *bugfix*, *minor* and *major milestones* are determined based on the
-latest release. For example assuming your latest release is titled `v1.2.3` then
-the title of the *bugfix milestone* correspond to `v1.2.4`, the title of the
-*minor milestone* corresponds to `v1.3.0` and the title of the
-*major milestone* corresponds to `v2.0.0`.
+latest release, using its title or, for untitled releases, its tag. For example
+assuming your latest release is titled `v1.2.3` then the title of the
+*bugfix milestone* correspond to `v1.2.4`, the title of the *minor milestone*
+corresponds to `v1.3.0` and the title of the *major milestone* corresponds to
+`v2.0.0`.
 
 In case the target milestone does not exist, the `fallback` milestone is used.
 For example, if the pull-request would be assigned to the *bugfix milestone*
@@ -176,8 +177,6 @@ the marker gets removed along with the fix.
 - `core.setFailed()` is called without returning, so an invalid `fallback` or
   ambiguous milestone titles fail the workflow but still assign a milestone to
   the pull-request.
-- The empty-release guard only compares against `''`, so a release created from
-  a tag without a title (`name: null`) throws a `TypeError`.
 - A release name that is not a three-component version, e.g. `v1.2`, bumps to
   `v1.2.NaN`; no milestone matches and the fallback then silently assigns the
   minor milestone.
