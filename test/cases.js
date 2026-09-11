@@ -158,11 +158,10 @@ export const cases = [
         expect: { output: '-', noPatch: true }
     },
     {
-        name: 'release without a name (tag-only release) is a no-op',
+        name: 'release without a name falls back to the tag',
         payload: pullRequest(['bug']),
         latestRelease: { name: null, tag_name: 'v1.2.3' },
-        expect: { output: '-', noPatch: true },
-        knownIssue: 'the guard only compares against "", so a null name throws a TypeError'
+        expect: { output: 'v1.2.4', patchMilestone: 3 }
     },
     {
         name: 'release with a non-semver name is a no-op',
