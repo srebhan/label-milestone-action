@@ -145,7 +145,9 @@ npm install
 npm run build
 ```
 
-and commit the result together with the source change.
+and commit the result together with the source change. CI rebuilds `dist/` and
+fails if it differs from what is committed, which also catches dependency
+updates, e.g. from Dependabot, that have not been rebuilt yet.
 
 The project is an ES module (`"type": "module"` in `package.json`), as the
 `@actions/*` dependencies are ESM-only and cannot be loaded from CommonJS.
