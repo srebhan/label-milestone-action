@@ -121,7 +121,7 @@ async function run() {
         // Set the milestone
         const milestone = match[0]
         core.debug(`Updating milestone to ${milestone.title}...`);
-        octokit.rest.issues.update({
+        await octokit.rest.issues.update({
             ...context.repo,
             issue_number: pull_request.number,
             milestone: milestone.number
@@ -130,6 +130,7 @@ async function run() {
     } catch (error) {
         core.error(error)
         core.setFailed(error.message);
+        core.setOutput('milestone', '-');
     }
 }
 

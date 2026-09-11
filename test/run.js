@@ -91,7 +91,7 @@ async function main() {
         process.exit(1);
     }
 
-    const state = { latestRelease: null, milestones: [], requests: [], patches: [] };
+    const state = { latestRelease: null, milestones: [], patchStatus: 200, requests: [], patches: [] };
     const server = createMockApi(state);
     await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
     const apiUrl = `http://127.0.0.1:${server.address().port}`;
@@ -110,6 +110,7 @@ async function main() {
     for (const testCase of cases) {
         state.latestRelease = 'latestRelease' in testCase ? testCase.latestRelease : DEFAULT_LATEST_RELEASE;
         state.milestones = 'milestones' in testCase ? testCase.milestones : DEFAULT_MILESTONES;
+        state.patchStatus = testCase.patchStatus || 200;
         state.requests = [];
         state.patches = [];
 
