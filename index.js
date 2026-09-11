@@ -76,6 +76,11 @@ async function run() {
             return;
         }
         var version = bumpVersion(latest, target);
+        if (version === undefined) {
+            core.warning(`Latest release "${latest}" is not a version like v1.2.3, cannot determine the milestone`);
+            core.setOutput('milestone', '-');
+            return;
+        }
 
         // Try to get the milestones and check if we have the correct one
         const milestones = await(octokit.rest.issues.listMilestones(
@@ -137,8 +142,15 @@ function getLabelList(name) {
         .filter(label => label !== '');
 }
 
+// Bump a version like v1.2.3 to the next bugfix, minor or major version. Any
+// suffix after the third component, e.g. v1.2.3-rc.1, is dropped. Returns
+// undefined if the input does not start with a three-component version.
 function bumpVersion(before, target) {
-    const version = before.replace(/^v/, '').split('.').map(x => parseInt(x, 10));
+    const match = before.match(/^v?(\d+)\.(\d+)\.(\d+)(?![.\d])/);
+    if (!match) {
+        return undefined;
+    }
+    const version = match.slice(1, 4).map(x => parseInt(x, 10));
 
     switch (target) {
         case 'bugfix':
