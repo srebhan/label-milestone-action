@@ -36551,6 +36551,8 @@ async function run() {
         const valid_fallbacks = ['', 'bugfix', 'minor', 'major']
         if (fallback !== undefined && !valid_fallbacks.includes(fallback)) {
             setFailed('Invalid "fallback"; has to be "bugfix", "minor", "major" or unset!');
+            setOutput('milestone', '-');
+            return;
         }
 
         // Determine the target version
@@ -36624,6 +36626,8 @@ async function run() {
 
         if (match.length > 1) {
             setFailed(`Ambiguous milestones for ` + version);
+            setOutput('milestone', '-');
+            return;
         }
 
         // Set the milestone

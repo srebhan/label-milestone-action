@@ -34,6 +34,8 @@ async function run() {
         const valid_fallbacks = ['', 'bugfix', 'minor', 'major']
         if (fallback !== undefined && !valid_fallbacks.includes(fallback)) {
             core.setFailed('Invalid "fallback"; has to be "bugfix", "minor", "major" or unset!');
+            core.setOutput('milestone', '-');
+            return;
         }
 
         // Determine the target version
@@ -107,6 +109,8 @@ async function run() {
 
         if (match.length > 1) {
             core.setFailed(`Ambiguous milestones for ` + version);
+            core.setOutput('milestone', '-');
+            return;
         }
 
         // Set the milestone

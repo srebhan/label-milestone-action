@@ -113,8 +113,7 @@ export const cases = [
         name: 'invalid fallback value fails without touching the pull-request',
         payload: pullRequest(['bug']),
         inputs: { fallback: 'nonsense' },
-        expect: { failed: true, noPatch: true },
-        knownIssue: 'setFailed() does not return, so the pull-request is still assigned a milestone'
+        expect: { failed: true, output: '-', noPatch: true }
     },
 
     // --- milestone lookup --------------------------------------------------
@@ -140,8 +139,7 @@ export const cases = [
         name: 'ambiguous milestone titles fail without touching the pull-request',
         payload: pullRequest(['bug']),
         milestones: [milestone(3, 'v1.2.4'), milestone(8, 'v1.2.4')],
-        expect: { failed: true, noPatch: true },
-        knownIssue: 'setFailed() does not return, so one of the ambiguous milestones is still assigned'
+        expect: { failed: true, output: '-', noPatch: true }
     },
 
     // --- release / version parsing -----------------------------------------
