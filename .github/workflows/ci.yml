@@ -8,28 +8,76 @@ on:
 permissions:
   contents: read
 
+# A newer push to a pull-request supersedes the running build, which would
+# otherwise fail to push its rebuilt dist/ on top of the outdated branch
+concurrency:
+  group: ci-${{ github.head_ref || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      # Pushes the rebuilt dist/ to pull-request branches. Pull-requests from
+      # forks always get a read-only token, whatever is requested here.
+      contents: write
+    env:
+      # dist/ is what the action executes. Pull-requests from branches of this
+      # repository get it rebuilt and committed. Forks cannot be pushed to and
+      # main is not pushed to, so those are only checked for an outdated dist/.
+      REBUILD: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          # Check out the branch rather than the merge commit, so the rebuilt
+          # dist/ can be committed on top of it
+          ref: ${{ env.REBUILD == 'true' && github.head_ref || '' }}
+          # Keep the write token out of reach of the dependency code executed
+          # by the build and the tests, it is only handed to the push below
+          persist-credentials: false
+
       - uses: actions/setup-node@v7
         with:
           # Keep in sync with `runs.using` in action.yml
           node-version: 24
           cache: npm
+
       - name: Install dependencies
-        run: npm ci
-      # Runs the committed dist/index.js, i.e. exactly what the action ships
+        run: npm ci --ignore-scripts
+
+      - name: Build
+        run: npm run build
+
+      # Tests the freshly built bundle, i.e. exactly what is shipped or committed
       - name: Run tests
         run: npm test
-      # dist/ is what the action executes, so dependency updates and source
-      # changes only reach users once it is rebuilt and committed.
-      - name: Check dist is rebuilt
+
+      - name: Check dist is up to date
+        if: env.REBUILD != 'true'
         run: |
-          npm run build
           if [ -n "$(git status --porcelain dist)" ]; then
             echo "::error::dist/ is out of date, run 'npm run build' and commit the result"
             git status --porcelain dist
             exit 1
           fi
+
+      # Pushes made with the GITHUB_TOKEN do not trigger workflows, so this
+      # commit gets no CI run of its own. The steps above tested its content.
+      - name: Commit dist
+        if: env.REBUILD == 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          HEAD_REF: ${{ github.head_ref }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          if [ -z "$(git status --porcelain dist)" ]; then
+            echo "dist/ is already up to date"
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add dist
+          # "[dependabot skip]" allows Dependabot to keep rebasing its
+          # pull-requests over this commit, this workflow then runs again
+          git commit -m 'chore: Rebuild dist [dependabot skip]'
+          git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${REPOSITORY}.git" "HEAD:${HEAD_REF}"
