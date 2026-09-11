@@ -5,7 +5,8 @@
 //
 //   payload         the `github.context.payload` the action is handed
 //   inputs          action inputs, merged over the action.yml defaults
-//   latestRelease   response for GET /releases/latest (null renders a 404)
+//   latestRelease   response for GET /releases/latest
+//   releaseStatus   HTTP status for GET /releases/latest, defaults to 200
 //   milestones      response for GET /milestones
 //   patchStatus     HTTP status for PATCH /issues/{number}, defaults to 200
 //   expect.output   the expected `milestone` action output
@@ -193,13 +194,19 @@ export const cases = [
         expect: { output: 'v1.2.4', patchMilestone: 3 }
     },
     {
-        name: 'repository without any release',
+        name: 'repository without any release is a no-op',
         payload: pullRequest(['bug']),
-        latestRelease: null,
-        expect: { failed: true, output: '-', noPatch: true }
+        releaseStatus: 404,
+        expect: { output: '-', noPatch: true }
     },
 
     // --- API errors --------------------------------------------------------
+    {
+        name: 'failing release lookup fails the action',
+        payload: pullRequest(['bug']),
+        releaseStatus: 500,
+        expect: { failed: true, output: '-', noPatch: true }
+    },
     {
         name: 'failing milestone assignment fails the action',
         payload: pullRequest(['bug']),

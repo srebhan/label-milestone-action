@@ -65,8 +65,19 @@ async function run() {
 
         const octokit = github.getOctokit(token);
 
-        // Get the latest release and bump the version
-        const latest_response = await (octokit.rest.repos.getLatestRelease(context.repo))
+        // Get the latest release and bump the version, the API responds with
+        // "not found" if the repository has no (published) release yet
+        let latest_response;
+        try {
+            latest_response = await octokit.rest.repos.getLatestRelease(context.repo)
+        } catch (error) {
+            if (error.status !== 404) {
+                throw error;
+            }
+            core.info(`No release found...`);
+            core.setOutput('milestone', '-');
+            return;
+        }
         // Prefer the release title, but fall back to the tag for untitled releases
         const latest = latest_response.data.name || latest_response.data.tag_name
         core.debug(`Latest release: ${latest}`);

@@ -85,7 +85,8 @@ assuming your latest release is titled `v1.2.3` then the title of the
 corresponds to `v1.3.0` and the title of the *major milestone* corresponds to
 `v2.0.0`. Anything after the version, e.g. `v1.2.3-rc.1`, is ignored. If the
 release does not start with a three-component version, the action emits a
-warning and does not assign a milestone.
+warning and does not assign a milestone. Repositories without any published
+release are skipped as well.
 
 In case the target milestone does not exist, the `fallback` milestone is used.
 For example, if the pull-request would be assigned to the *bugfix milestone*

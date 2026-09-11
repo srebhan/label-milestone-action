@@ -15,8 +15,8 @@ export function createMockApi(state) {
 
         // GET /repos/{owner}/{repo}/releases/latest
         if (req.method === 'GET' && /\/releases\/latest$/.test(path)) {
-            if (state.latestRelease === null) {
-                return send(404, { message: 'Not Found' });
+            if (state.releaseStatus !== 200) {
+                return send(state.releaseStatus, { message: `Request failed with status ${state.releaseStatus}` });
             }
             return send(200, state.latestRelease);
         }
