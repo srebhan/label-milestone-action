@@ -7,6 +7,7 @@
 //   inputs          action inputs, merged over the action.yml defaults
 //   latestRelease   response for GET /releases/latest (null renders a 404)
 //   milestones      response for GET /milestones
+//   patchStatus     HTTP status for PATCH /issues/{number}, defaults to 200
 //   expect.output   the expected `milestone` action output
 //   expect.failed   the action is expected to fail the workflow
 //   expect.noPatch  the pull-request must not be modified
@@ -195,6 +196,14 @@ export const cases = [
         name: 'repository without any release',
         payload: pullRequest(['bug']),
         latestRelease: null,
-        expect: { failed: true, noPatch: true }
+        expect: { failed: true, output: '-', noPatch: true }
+    },
+
+    // --- API errors --------------------------------------------------------
+    {
+        name: 'failing milestone assignment fails the action',
+        payload: pullRequest(['bug']),
+        patchStatus: 403,
+        expect: { failed: true, output: '-' }
     }
 ];

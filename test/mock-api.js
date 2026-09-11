@@ -31,6 +31,9 @@ export function createMockApi(state) {
             let body = '';
             req.on('data', (chunk) => (body += chunk));
             req.on('end', () => {
+                if (state.patchStatus !== 200) {
+                    return send(state.patchStatus, { message: 'Resource not accessible by integration' });
+                }
                 state.patches.push({ path: path, body: JSON.parse(body || '{}') });
                 send(200, { number: 1 });
             });
