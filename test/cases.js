@@ -171,8 +171,25 @@ export const cases = [
         name: 'release name with only two components is a no-op',
         payload: pullRequest(['bug']),
         latestRelease: { name: 'v1.2' },
-        expect: { output: '-', noPatch: true },
-        knownIssue: 'the bumped version becomes v1.2.NaN, so the fallback silently assigns the minor milestone'
+        expect: { output: '-', noPatch: true }
+    },
+    {
+        name: 'release name with four components is a no-op',
+        payload: pullRequest(['bug']),
+        latestRelease: { name: 'v1.2.3.4' },
+        expect: { output: '-', noPatch: true }
+    },
+    {
+        name: 'release name with a dotted pre-release suffix',
+        payload: pullRequest(['bug']),
+        latestRelease: { name: 'v1.2.3-rc.1' },
+        expect: { output: 'v1.2.4', patchMilestone: 3 }
+    },
+    {
+        name: 'release name with trailing text',
+        payload: pullRequest(['bug']),
+        latestRelease: { name: 'v1.2.3 (hotfix)' },
+        expect: { output: 'v1.2.4', patchMilestone: 3 }
     },
     {
         name: 'repository without any release',

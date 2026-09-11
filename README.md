@@ -83,7 +83,9 @@ latest release, using its title or, for untitled releases, its tag. For example
 assuming your latest release is titled `v1.2.3` then the title of the
 *bugfix milestone* correspond to `v1.2.4`, the title of the *minor milestone*
 corresponds to `v1.3.0` and the title of the *major milestone* corresponds to
-`v2.0.0`.
+`v2.0.0`. Anything after the version, e.g. `v1.2.3-rc.1`, is ignored. If the
+release does not start with a three-component version, the action emits a
+warning and does not assign a milestone.
 
 In case the target milestone does not exist, the `fallback` milestone is used.
 For example, if the pull-request would be assigned to the *bugfix milestone*
@@ -166,14 +168,3 @@ Scenarios live in [`test/cases.js`](test/cases.js), one entry per pull-request
 situation. By default the tests run `dist/index.js`, the entry point
 `action.yml` actually uses. To check the sources instead, or any other bundle,
 pass the path: `node test/run.js index.js`.
-
-### Known issues
-
-Some cases describe how the action *should* behave but do not pass yet. They
-are marked with a `knownIssue` note, reported separately and do not fail the
-suite. If one starts passing, the runner reports it as `FIXED` and fails, so
-the marker gets removed along with the fix.
-
-- A release name that is not a three-component version, e.g. `v1.2`, bumps to
-  `v1.2.NaN`; no milestone matches and the fallback then silently assigns the
-  minor milestone.
