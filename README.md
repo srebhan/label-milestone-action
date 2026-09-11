@@ -174,9 +174,6 @@ are marked with a `knownIssue` note, reported separately and do not fail the
 suite. If one starts passing, the runner reports it as `FIXED` and fails, so
 the marker gets removed along with the fix.
 
-- `core.setFailed()` is called without returning, so an invalid `fallback` or
-  ambiguous milestone titles fail the workflow but still assign a milestone to
-  the pull-request.
 - A release name that is not a three-component version, e.g. `v1.2`, bumps to
   `v1.2.NaN`; no milestone matches and the fallback then silently assigns the
   minor milestone.

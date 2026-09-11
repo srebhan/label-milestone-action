@@ -59,18 +59,15 @@ function checkExpectations(testCase, result, output, patches) {
     const expected = testCase.expect;
     const failed = result.code !== 0 || /::error::/.test(result.stdout);
 
-    if (expected.failed) {
-        if (!failed) {
-            problems.push('expected the action to fail the workflow, but it succeeded');
-        }
-    } else {
-        if (failed) {
-            const error = (result.stdout.match(/::error::.*/) || ['(no ::error:: line)'])[0];
-            problems.push(`unexpected failure (exit code ${result.code}): ${error}`);
-        }
-        if (expected.output !== undefined && output !== expected.output) {
-            problems.push(`milestone output: expected ${JSON.stringify(expected.output)}, got ${JSON.stringify(output)}`);
-        }
+    if (expected.failed && !failed) {
+        problems.push('expected the action to fail the workflow, but it succeeded');
+    }
+    if (!expected.failed && failed) {
+        const error = (result.stdout.match(/::error::.*/) || ['(no ::error:: line)'])[0];
+        problems.push(`unexpected failure (exit code ${result.code}): ${error}`);
+    }
+    if (expected.output !== undefined && output !== expected.output) {
+        problems.push(`milestone output: expected ${JSON.stringify(expected.output)}, got ${JSON.stringify(output)}`);
     }
 
     if (expected.noPatch && patches.length > 0) {
